@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wallos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: cinematic dark hero (blurred product backdrop, giant condensed title, opening cards, 01/05 counter)
+   merged with a product-carousel stage (big framed screenshot, round badge, pill nav, social proof).
+   Real Wallos screenshots carry the page; Wallos coral is the accent. Single dark look by design. */
+:root {
+  --bg: #0d0e12;
+  --bg-2: #13141a;
+  --surface: #181a21;
+  --line: rgba(255,255,255,.1);
+  --fg: #f3f0ea;
+  --muted: rgba(243,240,234,.66);
+  --gold: #f26b4f;
+  --gold-ink: #1f0a05;
+  --glow: #f26b4f;
+  --f-display: "Bebas Neue", "Oswald", "Arial Narrow", Impact, sans-serif;
+  --f-body: "Inter", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --maxw: 1320px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--bg); }
+a { color: inherit; }
+img { display: block; max-width: 100%; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 8px; }
+h1, h2, h3 { margin: 0; font-family: var(--f-display); font-weight: 400; line-height: .92; letter-spacing: .01em; text-wrap: balance; }
+p { margin: 0; }
+.wrap { max-width: var(--maxw); margin-inline: auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.dash { display: block; width: 26px; height: 3px; border-radius: 2px; background: var(--fg); }
+
+.round { width: 46px; height: 46px; border-radius: 50%; border: 0; display: grid; place-items: center; cursor: pointer; background: var(--gold); color: var(--gold-ink); text-decoration: none; transition: transform .2s, box-shadow .2s; flex: none; }
+.round:hover { transform: scale(1.07); box-shadow: 0 0 0 7px rgba(242,107,79,.2); }
+.round svg, .circle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.pill { display: inline-flex; align-items: center; height: 46px; padding: 0 24px; border-radius: 999px; border: 1px solid rgba(255,255,255,.4); font: 600 12px/1 var(--f-body); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; transition: background .2s, color .2s, border-color .2s; }
+.pill:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.pill.gold { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); }
+.pill.gold:hover { background: var(--fg); border-color: var(--fg); }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; overflow: hidden; isolation: isolate; padding-bottom: 28px; }
+.backdrop { position: absolute; inset: -60px; z-index: -3; background-size: cover; background-position: center; filter: blur(46px) saturate(1.3) brightness(.36); transform: scale(1.08); transition: opacity .9s ease; }
+.backdrop.b { opacity: 0; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: -2; background: radial-gradient(700px 500px at 70% 40%, color-mix(in srgb, var(--glow) 28%, transparent), transparent 70%); }
+.hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(11,12,15,.92) 0%, rgba(11,12,15,.56) 38%, rgba(11,12,15,.1) 70%), linear-gradient(0deg, var(--bg) 0%, transparent 30%); }
+
+.nav { display: flex; align-items: center; gap: 20px; padding-block: 22px; position: relative; z-index: 10; }
+.brand { display: flex; align-items: center; text-decoration: none; }
+.brand img { height: 34px; width: auto; }
+.menu { margin-inline: auto; display: flex; gap: 4px; background: rgba(255,255,255,.08); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--line); border-radius: 999px; padding: 5px; }
+.menu a { font: 600 11px/1 var(--f-body); letter-spacing: .1em; text-transform: uppercase; text-decoration: none; padding: 10px 16px; border-radius: 999px; color: var(--muted); transition: color .2s, background .2s; }
+.menu a:hover { color: var(--fg); }
+.menu a.on { background: var(--fg); color: var(--bg); }
+.lang { display: flex; gap: 8px; }
+.lang button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); cursor: pointer; font: 700 11px/1 var(--f-body); letter-spacing: .06em; color: var(--muted); background: rgba(255,255,255,.04); transition: background .2s, color .2s; }
+.lang button[aria-pressed="true"] { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); }
+@media (max-width: 880px) { .menu { display: none; } .lang { margin-left: auto; } }
+
+.hero-grid { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); gap: 32px; align-items: center; padding-top: 34px; position: relative; }
+.copy { display: grid; gap: 18px; position: relative; z-index: 3; }
+.kicker { font-size: 15px; opacity: .9; }
+.title { font-size: clamp(4rem, 8.4vw, 8.4rem); text-transform: uppercase; overflow: hidden; padding-top: .05em; }
+.title span { display: block; }
+.title.swap span { animation: lineup .8s cubic-bezier(.2,.8,.2,1) both; }
+.title.swap span:nth-child(2) { animation-delay: .08s; }
+@keyframes lineup { from { transform: translateY(105%); } to { transform: none; } }
+.desc { color: var(--muted); max-width: 42ch; font-size: 16px; }
+.fadeup { animation: fadeup .7s cubic-bezier(.2,.8,.2,1) both .15s; }
+@keyframes fadeup { from { transform: translateY(14px); opacity: .2; } to { transform: none; opacity: 1; } }
+.actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
+
+.stage { position: relative; perspective: 2000px; margin-right: -12%; }
+.frame { position: relative; border-radius: 16px; overflow: hidden; background: #0f1015; border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 50px 120px -30px rgba(0,0,0,.85), 0 0 0 6px rgba(255,255,255,.03);
+  transform: rotateY(-10deg) rotateX(4deg); transform-origin: left center; transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+.frame-bar { display: flex; align-items: center; gap: 7px; padding: 10px 14px; background: #16171d; border-bottom: 1px solid rgba(255,255,255,.07); }
+.frame-bar i { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.14); }
+.frame-bar span { margin-left: 12px; font: 11px var(--f-mono); color: rgba(255,255,255,.4); }
+.frame-img { aspect-ratio: 16 / 10; background: #0f1015; }
+.frame-img img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.frame.mobile .frame-img img { object-fit: contain; object-position: center; padding-block: 14px; }
+.badge { position: absolute; z-index: 5; left: -46px; top: 54%; width: 120px; height: 120px; border-radius: 50%; background: var(--gold); color: var(--gold-ink); display: grid; place-content: center; text-align: center; box-shadow: 0 20px 40px -14px rgba(0,0,0,.6); transform: rotate(-8deg); }
+.badge b { font: 400 40px/.9 var(--f-display); }
+.badge span { font: 600 11px/1.2 var(--f-body); padding-inline: 14px; }
+.badge.pop { animation: pop .6s cubic-bezier(.3,1.6,.5,1); }
+@keyframes pop { from { transform: scale(.4) rotate(-40deg); } to { transform: scale(1) rotate(-8deg); } }
+
+.cards { position: relative; z-index: 6; display: flex; gap: 14px; margin-top: -86px; margin-left: 18%; padding-block: 6px; overflow: hidden; mask-image: linear-gradient(90deg, #000 88%, transparent); -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); }
+.card { flex: none; width: 150px; aspect-ratio: 150 / 200; border-radius: 14px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,.16); padding: 0; cursor: pointer; background: #111 center top / cover no-repeat; color: #fff; text-align: left; font: inherit;
+  box-shadow: 0 24px 40px -20px rgba(0,0,0,.9); transition: transform .35s cubic-bezier(.2,.8,.2,1); animation: cardin .7s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 70ms); }
+.card:hover { transform: translateY(-8px); }
+.card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.05) 30%, rgba(0,0,0,.88)); }
+.card .meta { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 1; display: grid; gap: 3px; }
+.card .meta .dash { width: 14px; height: 2px; background: var(--c, var(--gold)); }
+.card .meta small { font-size: 10.5px; opacity: .8; }
+.card .meta b { font: 400 22px/.95 var(--f-display); letter-spacing: .02em; text-transform: uppercase; }
+@keyframes cardin { from { transform: translateX(50px); } to { transform: none; } }
+.opener { position: fixed; z-index: 40; pointer-events: none; border-radius: 14px; overflow: hidden; background: #0f1015 center top / cover no-repeat; box-shadow: 0 40px 100px -20px rgba(0,0,0,.8); }
+
+.bar { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 24px; margin-top: 34px; position: relative; z-index: 3; }
+.proof { display: flex; align-items: center; gap: 12px; }
+.avatars { display: flex; }
+.avatars i { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--bg); margin-left: -10px; display: grid; place-items: center; font: 700 12px/1 var(--f-body); font-style: normal; color: #1a1a1a; }
+.avatars i:first-child { margin-left: 0; }
+.proof b { display: block; font: 400 22px/1 var(--f-display); letter-spacing: .02em; }
+.proof small { color: var(--muted); font-size: 12px; }
+.track { height: 1px; background: rgba(255,255,255,.22); position: relative; }
+.track i { position: absolute; left: 0; top: -1px; height: 3px; border-radius: 2px; background: var(--glow); transition: width .7s cubic-bezier(.2,.8,.2,1), background .9s; }
+.circles { display: flex; gap: 10px; }
+.circle { width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(255,255,255,.38); background: transparent; color: var(--fg); cursor: pointer; display: grid; place-items: center; transition: background .2s, color .2s; }
+.circle:hover { background: var(--fg); color: var(--bg); }
+.counter { font: 400 64px/.8 var(--f-display); font-variant-numeric: tabular-nums; }
+.counter small { font-size: 18px; opacity: .45; margin-left: 4px; }
+
+@media (max-width: 1000px) {
+  .hero-grid { grid-template-columns: 1fr; padding-top: 10px; }
+  .stage { margin-right: 0; }
+  .frame { transform: none; }
+  .badge { left: auto; right: 10px; top: -40px; width: 92px; height: 92px; }
+  .badge b { font-size: 30px; }
+  .cards { margin: 18px 0 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; mask-image: none; -webkit-mask-image: none; }
+  .cards::-webkit-scrollbar { display: none; }
+  .card { width: 128px; scroll-snap-align: start; }
+  .bar { grid-template-columns: 1fr auto auto; gap: 16px; }
+  .track { display: none; }
+  .counter { font-size: 46px; }
+}
+@media (max-width: 520px) { .proof small { display: none; } .proof b { font-size: 18px; } }
+
+/* ---------- Sections ---------- */
+section { padding-block: 100px; }
+.head { display: grid; gap: 14px; margin-bottom: 44px; max-width: 780px; }
+.head h2 { font-size: clamp(3rem, 7vw, 5.6rem); text-transform: uppercase; }
+.head p { color: var(--muted); font-size: 17px; max-width: 56ch; }
+.eyebrow { font: 600 11px/1 var(--f-body); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+
+.strip { border-block: 1px solid var(--line); background: var(--bg-2); padding-block: 0; }
+.figs { display: grid; grid-template-columns: repeat(4, 1fr); }
+.fig { padding: 30px 24px; border-left: 1px solid var(--line); display: grid; gap: 6px; }
+.fig:first-child { border-left: 0; padding-left: 0; }
+.fig b { font: 400 clamp(3rem, 6vw, 4.6rem)/.85 var(--f-display); }
+.fig b em { font-style: normal; color: var(--gold); }
+.fig span { color: var(--muted); font-size: 14px; }
+@media (max-width: 760px) { .figs { grid-template-columns: 1fr 1fr; } .fig { padding: 22px 14px; } .fig:nth-child(3) { border-left: 0; padding-left: 0; } .fig:nth-child(n+3) { border-top: 1px solid var(--line); } }
+
+/* gallery */
+.gallery { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+.shot { margin: 0; grid-column: span 3; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 14px; display: grid; gap: 14px; align-content: start; transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s; }
+.shot:hover { transform: translateY(-6px); border-color: rgba(242,107,79,.5); }
+.shot.s4 { grid-column: span 4; } .shot.s2 { grid-column: span 2; }
+.shot .pic { border-radius: 12px; overflow: hidden; background: #0f1015; aspect-ratio: 16 / 11; }
+.shot.s2 .pic { aspect-ratio: auto; height: 100%; max-height: 520px; }
+.shot .pic img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.shot .cap { display: grid; gap: 4px; padding: 0 6px 6px; }
+.shot .cap span { font: 600 10.5px/1 var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+.shot .cap b { font: 400 28px/1 var(--f-display); letter-spacing: .02em; text-transform: uppercase; }
+.shot .cap p { color: var(--muted); font-size: 14.5px; }
+@media (max-width: 960px) { .gallery { grid-template-columns: 1fr 1fr; } .shot, .shot.s4 { grid-column: span 2; } .shot.s2 { grid-column: span 2; } .shot.s2 .pic { max-height: 460px; } }
+
+/* phones */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.phones { display: flex; gap: 22px; justify-content: center; align-items: flex-start; }
+.phone { width: min(240px, 44%); border-radius: 34px; padding: 9px; background: #050608; box-shadow: 0 0 0 1px var(--line), 0 40px 80px -30px rgba(0,0,0,.9); }
+.phone img { border-radius: 26px; width: 100%; }
+.phone:nth-child(2) { margin-top: 60px; }
+.ticks { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 14px; }
+.ticks li { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; color: var(--muted); }
+.ticks li i { width: 30px; height: 30px; border-radius: 50%; background: var(--gold); color: var(--gold-ink); display: grid; place-items: center; font: 700 13px/1 var(--f-body); font-style: normal; }
+.ticks b { color: var(--fg); }
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; gap: 36px; } }
+
+/* light / dark */
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.duo figure { margin: 0; display: grid; gap: 12px; }
+.duo .pic { border-radius: 20px; overflow: hidden; border: 1px solid var(--line); aspect-ratio: 16 / 11; }
+.duo .pic img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.duo figcaption { font: 400 26px/1 var(--f-display); letter-spacing: .03em; text-transform: uppercase; color: var(--muted); }
+@media (max-width: 700px) { .duo { grid-template-columns: 1fr; } }
+
+/* why */
+.why { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
+.why div { padding: 28px 24px 0 0; display: grid; gap: 10px; align-content: start; }
+.why h3 { font-size: 36px; text-transform: uppercase; }
+.why p { color: var(--muted); font-size: 15px; max-width: 30ch; }
+@media (max-width: 860px) { .why { grid-template-columns: 1fr 1fr; row-gap: 12px; } }
+@media (max-width: 520px) { .why { grid-template-columns: 1fr; } }
+
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 26px; display: grid; gap: 10px; align-content: start; }
+.step .n { font: 400 64px/.8 var(--f-display); color: var(--gold); }
+.step h3 { font-size: 32px; text-transform: uppercase; }
+.step p { color: var(--muted); font-size: 15px; }
+@media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+
+.start { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: start; }
+.demo { margin-top: 6px; display: inline-flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; font-size: 14px; color: var(--muted); }
+.demo code { font: 500 13px var(--f-mono); color: var(--fg); background: rgba(255,255,255,.06); padding: 3px 8px; border-radius: 6px; }
+.faq { display: grid; border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { list-style: none; cursor: pointer; padding: 20px 44px 20px 0; position: relative; font-weight: 600; font-size: 16px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; position: absolute; right: 0; top: 14px; width: 30px; height: 30px; border-radius: 50%; background: var(--gold); color: var(--gold-ink); display: grid; place-items: center; font: 700 18px/1 var(--f-body); transition: transform .3s; }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { color: var(--muted); padding: 0 0 20px; font-size: 15px; max-width: 60ch; }
+@media (max-width: 900px) { .start { grid-template-columns: 1fr; gap: 36px; } }
+
+footer { border-top: 1px solid var(--line); padding-block: 30px; color: var(--muted); font-size: 12.5px; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: space-between; }
+footer p { max-width: 76ch; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<main id="top">
+  <div class="hero" id="hero">
+    <div class="backdrop a" id="bd-a" aria-hidden="true"></div>
+    <div class="backdrop b" id="bd-b" aria-hidden="true"></div>
+    <div class="wrap">
+      <header class="nav">
+        <a class="brand" href="#top" aria-label="Wallos"><img src="img/logo-white.png" alt="Wallos" width="215" height="80"></a>
+        <nav class="menu" aria-label="Secciones">
+          <a href="#top" class="on" data-es="Inicio" data-en="Home">Inicio</a>
+          <a href="#galeria" data-es="Galería" data-en="Gallery">Galería</a>
+          <a href="#celular" data-es="Celular" data-en="Mobile">Celular</a>
+          <a href="#como" data-es="Cómo funciona" data-en="How it works">Cómo funciona</a>
+          <a href="#empieza" data-es="Empieza" data-en="Start">Empieza</a>
+        </nav>
+        <div class="lang" role="group" aria-label="Idioma / Language">
+          <button type="button" id="lang-es" data-lang="es" aria-pressed="true">ES</button>
+          <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+      </header>
+
+      <div class="hero-grid">
+        <div class="copy">
+          <span class="dash" aria-hidden="true"></span>
+          <p class="kicker" id="s-sub">Streaming · Música · Nube · Gimnasio</p>
+          <h1 class="title" id="s-title"><span>Tus suscripciones</span><span>bajo control</span></h1>
+          <p class="desc" id="s-desc">Wallos junta todo lo que pagas cada mes en un solo lugar. Ve cuánto gastas, cuándo se cobra cada una y deja de pagar lo que ya no usas.</p>
+          <div class="actions">
+            <a class="round" href="#galeria" aria-label="Ver la galería"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+            <a class="pill" href="#empieza" data-es="Empieza gratis" data-en="Start for free">Empieza gratis</a>
+          </div>
+        </div>
+        <div class="stage">
+          <div class="frame" id="frame">
+            <div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>wallos.local</span></div>
+            <div class="frame-img"><img id="frame-img" src="img/subscriptions-dark.jpg" alt="Wallos: tarjetas con cada suscripción, su precio y fecha de cobro" width="1280" height="1028"></div>
+          </div>
+          <div class="badge" id="badge" aria-hidden="true"><b>0</b><span>cobros sorpresa</span></div>
+        </div>
+      </div>
+
+      <div class="cards" id="cards" aria-label="Más de Wallos"></div>
+
+      <div class="bar">
+        <div class="proof">
+          <div class="avatars" aria-hidden="true"><i style="background:#f26b4f">A</i><i style="background:#f5b85c">M</i><i style="background:#7fc8e8">L</i></div>
+          <div><b data-es="8.8K+ personas" data-en="8.8K+ people">8.8K+ personas</b><small data-es="lo siguen en GitHub" data-en="follow it on GitHub">lo siguen en GitHub</small></div>
+        </div>
+        <div class="track"><i id="track" style="width:20%"></i></div>
+        <div class="circles">
+          <button class="circle" type="button" id="prev" aria-label="Anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <button class="circle" type="button" id="next" aria-label="Siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+        </div>
+        <div class="counter" id="counter" aria-live="polite">01<small>/05</small></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="strip">
+    <div class="wrap figs">
+      <div class="fig"><b><em>$</em>0</b><span data-es="Gratis, sin suscripción (sí, en serio)" data-en="Free, no subscription (really)">Gratis, sin suscripción (sí, en serio)</span></div>
+      <div class="fig"><b>0</b><span data-es="Anuncios ni rastreadores" data-en="Ads or trackers">Anuncios ni rastreadores</span></div>
+      <div class="fig"><b>1</b><span data-es="Lugar para todos tus pagos" data-en="Place for all your payments">Lugar para todos tus pagos</span></div>
+      <div class="fig"><b>8.8<em>K</em></b><span data-es="Personas ya lo siguen" data-en="People already follow it">Personas ya lo siguen</span></div>
+    </div>
+  </section>
+
+  <section id="galeria">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow" data-es="Galería" data-en="Gallery">Galería</span>
+        <h2 data-es="Así se ve por dentro" data-en="See it up close">Así se ve por dentro</h2>
+        <p data-es="Capturas reales de Wallos. Todo lo que necesitas para saber a dónde se va tu dinero cada mes." data-en="Real Wallos screenshots. Everything you need to know where your money goes each month.">Capturas reales de Wallos. Todo lo que necesitas para saber a dónde se va tu dinero cada mes.</p>
+      </div>
+      <div class="gallery">
+        <figure class="shot s4"><div class="pic"><img src="img/subscriptions-popup.jpg" alt="Detalle de una suscripción con próximo pago, método de pago y notas" loading="lazy" width="1280" height="1028"></div><figcaption class="cap"><span data-es="Detalle" data-en="Details">Detalle</span><b data-es="Cada dato a la mano" data-en="Every detail at hand">Cada dato a la mano</b><p data-es="Próximo pago, desde cuándo pagas, con qué tarjeta, quién la paga y tus notas." data-en="Next payment, start date, payment method, who pays and your notes.">Próximo pago, desde cuándo pagas, con qué tarjeta, quién la paga y tus notas.</p></figcaption></figure>
+        <figure class="shot s2"><div class="pic"><img src="img/subscriptions-mobile-sheet.jpg" alt="Detalle de una suscripción en el celular" loading="lazy" width="600" height="1191"></div><figcaption class="cap"><span data-es="Celular" data-en="Mobile">Celular</span><b data-es="También aquí" data-en="Here too">También aquí</b><p data-es="El mismo detalle en tu teléfono." data-en="The same details on your phone.">El mismo detalle en tu teléfono.</p></figcaption></figure>
+        <figure class="shot"><div class="pic"><img src="img/form.jpg" alt="Formulario para agregar una suscripción" loading="lazy" width="1280" height="1028"></div><figcaption class="cap"><span data-es="Agregar" data-en="Add">Agregar</span><b data-es="Agrega una en segundos" data-en="Add one in seconds">Agrega una en segundos</b><p data-es="Nombre, precio y cada cuándo se cobra. Wallos busca el logo por ti." data-en="Name, price and how often it bills. Wallos finds the logo for you.">Nombre, precio y cada cuándo se cobra. Wallos busca el logo por ti.</p></figcaption></figure>
+        <figure class="shot"><div class="pic"><img src="img/dashboard-light.jpg" alt="Resumen con próximos pagos y recomendaciones" loading="lazy" width="1280" height="1028"></div><figcaption class="cap"><span data-es="Resumen" data-en="Overview">Resumen</span><b data-es="Lo que viene este mes" data-en="What's due this month">Lo que viene este mes</b><p data-es="Pagos vencidos, próximos cobros y cuánto llevas de tu presupuesto." data-en="Overdue renewals, upcoming charges and how your budget is doing.">Pagos vencidos, próximos cobros y cuánto llevas de tu presupuesto.</p></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="celular" style="background:var(--bg-2);border-block:1px solid var(--line)">
+    <div class="wrap split">
+      <div class="phones">
+        <div class="phone"><img src="img/subscriptions-mobile-dark.jpg" alt="Lista de suscripciones en el celular" loading="lazy" width="600" height="1191"></div>
+        <div class="phone"><img src="img/dashboard-mobile-light.jpg" alt="Resumen de pagos en el celular, modo claro" loading="lazy" width="600" height="1191"></div>
+      </div>
+      <div class="head" style="margin:0">
+        <span class="eyebrow" data-es="En tu celular" data-en="On your phone">En tu celular</span>
+        <h2 data-es="Revisa tus pagos donde estés" data-en="Check your payments anywhere">Revisa tus pagos donde estés</h2>
+        <p data-es="Wallos se acomoda a tu teléfono y se puede agregar a la pantalla de inicio como si fuera una app." data-en="Wallos fits your phone and can be added to your home screen like an app.">Wallos se acomoda a tu teléfono y se puede agregar a la pantalla de inicio como si fuera una app.</p>
+        <ul class="ticks">
+          <li><i>✓</i><span><b data-es="Avisos antes del cobro." data-en="Alerts before charges.">Avisos antes del cobro.</b> <span data-es="Por correo, Telegram o Discord." data-en="By email, Telegram or Discord.">Por correo, Telegram o Discord.</span></span></li>
+          <li><i>✓</i><span><b data-es="En tu moneda." data-en="In your currency.">En tu moneda.</b> <span data-es="Pesos, dólares o euros, con conversión automática." data-en="Pesos, dollars or euros, with automatic conversion.">Pesos, dólares o euros, con conversión automática.</span></span></li>
+          <li><i>✓</i><span><b data-es="Para toda la familia." data-en="For the whole family.">Para toda la familia.</b> <span data-es="Marca quién paga cada suscripción." data-en="Mark who pays for each subscription.">Marca quién paga cada suscripción.</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="modos">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow" data-es="A tu gusto" data-en="Your way">A tu gusto</span>
+        <h2 data-es="Claro u oscuro" data-en="Light or dark">Claro u oscuro</h2>
+        <p data-es="Elige el modo que te guste, ordena tus suscripciones como quieras y agrúpalas por categoría." data-en="Pick the mode you like, sort your subscriptions any way and group them by category.">Elige el modo que te guste, ordena tus suscripciones como quieras y agrúpalas por categoría.</p>
+      </div>
+      <div class="duo">
+        <figure><div class="pic"><img src="img/subscriptions-light.jpg" alt="Wallos en modo claro" loading="lazy" width="1280" height="1028"></div><figcaption data-es="Modo claro" data-en="Light mode">Modo claro</figcaption></figure>
+        <figure><div class="pic"><img src="img/dashboard-dark.jpg" alt="Wallos en modo oscuro" loading="lazy" width="1280" height="1028"></div><figcaption data-es="Modo oscuro" data-en="Dark mode">Modo oscuro</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:var(--bg-2);border-block:1px solid var(--line)">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow" data-es="Por qué Wallos" data-en="Why Wallos">Por qué Wallos</span>
+        <h2 data-es="Tu dinero, tus datos" data-en="Your money, your data">Tu dinero, tus datos</h2>
+      </div>
+      <div class="why">
+        <div><h3 data-es="Privado" data-en="Private">Privado</h3><p data-es="Tus gastos se guardan en tu propio equipo, no en la nube de una empresa." data-en="Your spending stays on your own device, not in a company's cloud.">Tus gastos se guardan en tu propio equipo, no en la nube de una empresa.</p></div>
+        <div><h3 data-es="Sin tu banco" data-en="No bank login">Sin tu banco</h3><p data-es="No pide acceso a tu cuenta bancaria. Tú decides qué registras." data-en="It never asks for your bank login. You decide what to track.">No pide acceso a tu cuenta bancaria. Tú decides qué registras.</p></div>
+        <div><h3 data-es="Sin anuncios" data-en="No ads">Sin anuncios</h3><p data-es="Nada de publicidad ni de ofertas que intenten venderte otra suscripción." data-en="No ads and no offers trying to sell you yet another subscription.">Nada de publicidad ni de ofertas que intenten venderte otra suscripción.</p></div>
+        <div><h3 data-es="Libre" data-en="Open">Libre</h3><p data-es="Gratis y de código abierto, hecho por una comunidad." data-en="Free and open source, built by a community.">Gratis y de código abierto, hecho por una comunidad.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="como">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow" data-es="Cómo funciona" data-en="How it works">Cómo funciona</span>
+        <h2 data-es="Ahorra en tres pasos" data-en="Save in three steps">Ahorra en tres pasos</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="n">01</span><h3 data-es="Anota lo que pagas" data-en="Add what you pay">Anota lo que pagas</h3><p data-es="Netflix, Spotify, el gimnasio, tu plan del celular: agrégalos una sola vez." data-en="Netflix, Spotify, the gym, your phone plan: add them once.">Netflix, Spotify, el gimnasio, tu plan del celular: agrégalos una sola vez.</p></div>
+        <div class="step"><span class="n">02</span><h3 data-es="Activa los avisos" data-en="Turn on alerts">Activa los avisos</h3><p data-es="Wallos te recuerda días antes de cada cobro para que decidas a tiempo." data-en="Wallos reminds you days before each charge so you can decide in time.">Wallos te recuerda días antes de cada cobro para que decidas a tiempo.</p></div>
+        <div class="step"><span class="n">03</span><h3 data-es="Cancela lo que sobra" data-en="Cut what you don't use">Cancela lo que sobra</h3><p data-es="Mira cuánto gastas al mes y al año, y quédate solo con lo que sí usas." data-en="See what you spend per month and year, and keep only what you use.">Mira cuánto gastas al mes y al año, y quédate solo con lo que sí usas.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="empieza" style="padding-top:20px">
+    <div class="wrap start">
+      <div class="head" style="margin:0">
+        <span class="eyebrow" data-es="Empieza" data-en="Get started">Empieza</span>
+        <h2 data-es="Pruébalo hoy, gratis" data-en="Try it today, free">Pruébalo hoy, gratis</h2>
+        <p data-es="Hay una demo pública para probarlo sin instalar nada. Para usarlo con tus datos, Wallos se instala una vez en una computadora de tu casa o en un servidor; si nunca has instalado algo así, pídele ayuda a alguien con experiencia." data-en="There's a public demo you can try without installing anything. To use it with your own data, Wallos is installed once on a computer at home or a server; if you've never done that, ask someone with experience to help.">Hay una demo pública para probarlo sin instalar nada. Para usarlo con tus datos, Wallos se instala una vez en una computadora de tu casa o en un servidor; si nunca has instalado algo así, pídele ayuda a alguien con experiencia.</p>
+        <div class="actions">
+          <a class="pill gold" href="https://demo.wallosapp.com" target="_blank" rel="noopener" data-es="Probar la demo" data-en="Try the demo">Probar la demo</a>
+          <a class="pill" href="https://github.com/ellite/Wallos#installation" target="_blank" rel="noopener" data-es="Ver cómo instalarlo" data-en="See how to install">Ver cómo instalarlo</a>
+        </div>
+        <div class="demo"><span data-es="Datos de la demo:" data-en="Demo login:">Datos de la demo:</span><span><span data-es="usuario" data-en="user">usuario</span> <code>demo</code></span><span><span data-es="contraseña" data-en="password">contraseña</span> <code>demo</code></span></div>
+      </div>
+      <div class="faq">
+        <details><summary data-es="¿Cuánto cuesta?" data-en="How much does it cost?">¿Cuánto cuesta?</summary><p data-es="Nada. Wallos es gratuito y de código abierto. No hay versión de pago." data-en="Nothing. Wallos is free and open source. There's no paid tier.">Nada. Wallos es gratuito y de código abierto. No hay versión de pago.</p></details>
+        <details><summary data-es="¿Se conecta a mi banco?" data-en="Does it connect to my bank?">¿Se conecta a mi banco?</summary><p data-es="No. Tú anotas tus suscripciones una vez y Wallos lleva la cuenta. Nunca te pide claves bancarias." data-en="No. You add your subscriptions once and Wallos keeps track. It never asks for bank credentials.">No. Tú anotas tus suscripciones una vez y Wallos lleva la cuenta. Nunca te pide claves bancarias.</p></details>
+        <details><summary data-es="¿Necesito saber programar?" data-en="Do I need to know how to code?">¿Necesito saber programar?</summary><p data-es="Para usarlo, no. Para instalarlo la primera vez ayuda tener algo de experiencia con computadoras, o alguien que te eche la mano. La demo la puedes probar ya." data-en="Not to use it. Installing it the first time is easier with some computer experience or a friend's help. You can try the demo right now.">Para usarlo, no. Para instalarlo la primera vez ayuda tener algo de experiencia con computadoras, o alguien que te eche la mano. La demo la puedes probar ya.</p></details>
+        <details><summary data-es="¿Funciona en mi celular?" data-en="Does it work on my phone?">¿Funciona en mi celular?</summary><p data-es="Sí. Se adapta a la pantalla y puedes agregarlo a tu pantalla de inicio como una app." data-en="Yes. It fits the screen and you can add it to your home screen like an app.">Sí. Se adapta a la pantalla y puedes agregarlo a tu pantalla de inicio como una app.</p></details>
+        <details><summary data-es="¿Está en español?" data-en="Is it available in my language?">¿Está en español?</summary><p data-es="Sí, Wallos tiene varios idiomas, incluido el español, y maneja distintas monedas." data-en="Wallos supports multiple languages and handles different currencies.">Sí, Wallos tiene varios idiomas, incluido el español, y maneja distintas monedas.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p data-es="Concepto no oficial de landing page para Wallos, hecho como ejercicio de diseño. No está afiliado ni respaldado por el proyecto. Wallos es software libre bajo licencia GPL-3.0; su nombre, logo y capturas de pantalla pertenecen a sus autores. Las capturas solo se recortaron. Las marcas de terceros que aparecen en ellas son de sus dueños." data-en="Unofficial landing page concept for Wallos, made as a design exercise. Not affiliated with or endorsed by the project. Wallos is free software under the GPL-3.0 license; its name, logo and screenshots belong to its authors. Screenshots were only cropped. Third-party brands shown in them belong to their owners.">Concepto no oficial de landing page para Wallos, hecho como ejercicio de diseño. No está afiliado ni respaldado por el proyecto. Wallos es software libre bajo licencia GPL-3.0; su nombre, logo y capturas de pantalla pertenecen a sus autores. Las capturas solo se recortaron. Las marcas de terceros que aparecen en ellas son de sus dueños.</p>
+    <a href="https://github.com/ellite/Wallos" target="_blank" rel="noopener">github.com/ellite/Wallos</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var lang = 'es';
+  try { lang = localStorage.getItem('wallos-lang') || ((navigator.language || 'es').slice(0, 2) === 'en' ? 'en' : 'es'); } catch (e) {}
+
+  var slides = [
+    { img: 'img/subscriptions-dark.jpg', glow: '#f26b4f', mobile: false,
+      es: { sub: 'Streaming · Música · Nube · Gimnasio', title: ['Tus suscripciones', 'bajo control'], card: 'Suscripciones', tag: 'Todo junto', badge: ['0', 'cobros sorpresa'], alt: 'Wallos: tarjetas con cada suscripción, su precio y fecha de cobro', desc: 'Wallos junta todo lo que pagas cada mes en un solo lugar. Ve cuánto gastas, cuándo se cobra cada una y deja de pagar lo que ya no usas.' },
+      en: { sub: 'Streaming · Music · Cloud · Gym', title: ['Your subscriptions', 'under control'], card: 'Subscriptions', tag: 'All together', badge: ['0', 'surprise charges'], alt: 'Wallos: cards with each subscription, its price and billing date', desc: 'Wallos puts everything you pay for each month in one place. See what you spend, when each one bills, and stop paying for what you no longer use.' } },
+    { img: 'img/dashboard-dark.jpg', glow: '#f5b85c', mobile: false,
+      es: { sub: 'Correo · Telegram · Discord', title: ['Te avisa', 'antes del cobro'], card: 'Avisos', tag: 'A tiempo', badge: ['2 días', 'de anticipación'], alt: 'Resumen de Wallos con pagos vencidos, próximos pagos y recomendaciones', desc: 'Recibe un recordatorio días antes de cada pago, para cancelar a tiempo lo que ya no quieres.' },
+      en: { sub: 'Email · Telegram · Discord', title: ['Heads-up', 'before you pay'], card: 'Alerts', tag: 'On time', badge: ['2 days', 'ahead'], alt: 'Wallos overview with overdue renewals, upcoming payments and recommendations', desc: 'Get a reminder days before each charge, so you can cancel what you no longer want in time.' } },
+    { img: 'img/stats.jpg', glow: '#7fd18b', mobile: false,
+      es: { sub: 'Por mes · Por año · Por día', title: ['Cuánto gastas', 'de verdad'], card: 'Estadísticas', tag: 'Tus números', badge: ['€4', 'al día'], alt: 'Estadísticas de Wallos con gasto mensual, anual y por día', desc: 'Gasto mensual, anual y hasta por día. Descubre cuál es tu suscripción más cara y cuánto pagarás en los próximos meses.' },
+      en: { sub: 'Monthly · Yearly · Daily', title: ['What you', 'really spend'], card: 'Stats', tag: 'Your numbers', badge: ['€4', 'a day'], alt: 'Wallos statistics with monthly, yearly and daily cost', desc: 'Monthly, yearly and even daily cost. Find your most expensive subscription and what the next months will cost.' } },
+    { img: 'img/calendar.jpg', glow: '#7fc8e8', mobile: false,
+      es: { sub: 'Calendario de pagos', title: ['Tu mes', 'de pagos'], card: 'Calendario', tag: 'Fechas', badge: ['30', 'días a la vista'], alt: 'Calendario de Wallos con cada cobro marcado', desc: 'Un calendario con cada cobro marcado en su día, para que ninguna fecha te tome por sorpresa.' },
+      en: { sub: 'Payment calendar', title: ['Your month', 'of payments'], card: 'Calendar', tag: 'Dates', badge: ['30', 'days in view'], alt: 'Wallos calendar with every charge marked', desc: 'A calendar with every charge on its day, so no date ever catches you off guard.' } },
+    { img: 'img/subscriptions-mobile-dark.jpg', glow: '#c7a8f5', mobile: true,
+      es: { sub: 'Celular · Tablet · Laptop', title: ['En tu', 'bolsillo'], card: 'Celular', tag: 'Donde sea', badge: ['0', 'apps que bajar'], alt: 'Wallos en un celular', desc: 'Úsalo desde el celular y agrégalo a tu pantalla de inicio como si fuera una app.' },
+      en: { sub: 'Phone · Tablet · Laptop', title: ['In your', 'pocket'], card: 'Mobile', tag: 'Anywhere', badge: ['0', 'apps to download'], alt: 'Wallos on a phone', desc: 'Use it from your phone and add it to your home screen like an app.' } }
+  ];
+  slides.forEach(function (s) { var i = new Image(); i.src = s.img; });
+
+  var cur = 0, busy = false, timer = null, front = 'a';
+  var hero = document.getElementById('hero'), frame = document.getElementById('frame'), fimg = document.getElementById('frame-img');
+
+  function setBackdrop(src, instant) {
+    var a = document.getElementById('bd-a'), b = document.getElementById('bd-b');
+    if (instant) { a.style.backgroundImage = 'url("' + src + '")'; a.style.opacity = 1; b.style.opacity = 0; front = 'a'; return; }
+    var show = front === 'a' ? b : a, hide = front === 'a' ? a : b;
+    show.style.backgroundImage = 'url("' + src + '")'; show.style.opacity = 1; hide.style.opacity = 0; front = front === 'a' ? 'b' : 'a';
+  }
+  function renderCards() {
+    var box = document.getElementById('cards'); box.innerHTML = '';
+    for (var k = 1; k < slides.length; k++) {
+      var idx = (cur + k) % slides.length, s = slides[idx], L = s[lang];
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'card'; b.id = 'card-' + idx;
+      b.style.setProperty('--i', k - 1); b.style.setProperty('--c', s.glow);
+      b.style.backgroundImage = 'url("' + s.img + '")';
+      b.setAttribute('aria-label', L.card);
+      b.innerHTML = '<div class="meta"><span class="dash"></span><small></small><b></b></div>';
+      b.querySelector('small').textContent = L.tag; b.querySelector('b').textContent = L.card;
+      (function (i) { b.addEventListener('click', function () { go(i); }); })(idx);
+      box.appendChild(b);
+    }
+  }
+  function paint(animate, instant) {
+    var s = slides[cur], L = s[lang];
+    document.documentElement.style.setProperty('--glow', s.glow);
+    setBackdrop(s.img, instant);
+    fimg.src = s.img; fimg.alt = L.alt;
+    frame.classList.toggle('mobile', s.mobile);
+    var t = document.getElementById('s-title');
+    t.innerHTML = '<span></span><span></span>'; t.children[0].textContent = L.title[0]; t.children[1].textContent = L.title[1];
+    document.getElementById('s-sub').textContent = L.sub;
+    var d = document.getElementById('s-desc'); d.textContent = L.desc;
+    var bd = document.getElementById('badge'); bd.innerHTML = '<b></b><span></span>'; bd.firstChild.textContent = L.badge[0]; bd.lastChild.textContent = L.badge[1];
+    if (animate && !reduce) {
+      [t, d, bd].forEach(function (el) { el.classList.remove('swap', 'fadeup', 'pop'); });
+      void t.offsetWidth; t.classList.add('swap'); d.classList.add('fadeup'); bd.classList.add('pop');
+    }
+    document.getElementById('counter').innerHTML = String(cur + 1).padStart(2, '0') + '<small>/0' + slides.length + '</small>';
+    document.getElementById('track').style.width = ((cur + 1) / slides.length * 100) + '%';
+    renderCards();
+  }
+  function go(i) {
+    i = (i + slides.length) % slides.length;
+    if (busy || i === cur) return;
+    var card = document.getElementById('card-' + i);
+    if (reduce || !card || !card.animate) { cur = i; paint(false); return restart(); }
+    busy = true;
+    var r = card.getBoundingClientRect(), f = frame.querySelector('.frame-img').getBoundingClientRect();
+    var op = document.createElement('div'); op.className = 'opener';
+    op.style.backgroundImage = 'url("' + slides[i].img + '")';
+    if (slides[i].mobile) { op.style.backgroundSize = 'contain'; op.style.backgroundPosition = 'center'; }
+    Object.assign(op.style, { top: r.top + 'px', left: r.left + 'px', width: r.width + 'px', height: r.height + 'px' });
+    document.body.appendChild(op); card.style.visibility = 'hidden';
+    var anim = op.animate([
+      { top: r.top + 'px', left: r.left + 'px', width: r.width + 'px', height: r.height + 'px', borderRadius: '14px' },
+      { top: f.top + 'px', left: f.left + 'px', width: f.width + 'px', height: f.height + 'px', borderRadius: '0px' }
+    ], { duration: 760, easing: 'cubic-bezier(.7,0,.2,1)', fill: 'forwards' });
+    anim.onfinish = function () {
+      cur = i; paint(true);
+      var fade = op.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 380, easing: 'ease-out', fill: 'forwards' });
+      fade.onfinish = function () { op.remove(); busy = false; };
+    };
+    restart();
+  }
+  function restart() {
+    if (reduce) return; clearInterval(timer);
+    timer = setInterval(function () { if (!document.hidden && !hero.matches(':hover')) go(cur + 1); }, 6500);
+  }
+  document.getElementById('next').addEventListener('click', function () { go(cur + 1); });
+  document.getElementById('prev').addEventListener('click', function () { if (busy) return; cur = (cur - 1 + slides.length) % slides.length; paint(true); restart(); });
+
+  if (!reduce && matchMedia('(hover: hover) and (min-width: 1001px)').matches) {
+    var stage = document.querySelector('.stage');
+    stage.addEventListener('mousemove', function (e) {
+      var r = stage.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+      frame.style.transform = 'rotateY(' + (-10 + x * 8).toFixed(2) + 'deg) rotateX(' + (4 - y * 6).toFixed(2) + 'deg)';
+    });
+    stage.addEventListener('mouseleave', function () { frame.style.transform = ''; });
+  }
+
+  function applyLang(l) {
+    lang = l; document.documentElement.lang = l;
+    document.querySelectorAll('[data-' + l + ']').forEach(function (el) { el.textContent = el.getAttribute('data-' + l); });
+    document.querySelectorAll('.lang button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.lang === l)); });
+    paint(false, true);
+    try { localStorage.setItem('wallos-lang', l); } catch (e) {}
+  }
+  document.querySelectorAll('.lang button').forEach(function (b) { b.addEventListener('click', function () { applyLang(b.dataset.lang); }); });
+
+  applyLang(lang === 'en' ? 'en' : 'es');
+  restart();
+})();
+</script>
+</body>
+</html>
