@@ -72,6 +72,7 @@ p { margin: 0; }
 .kicker { font-size: 15px; opacity: .9; }
 .title { font-size: clamp(4rem, 8.4vw, 8.4rem); text-transform: uppercase; overflow: hidden; padding-top: .05em; }
 .title span { display: block; }
+.title.long { font-size: clamp(3rem, 6vw, 6.2rem); }
 .title.swap span { animation: lineup .8s cubic-bezier(.2,.8,.2,1) both; }
 .title.swap span:nth-child(2) { animation-delay: .08s; }
 @keyframes lineup { from { transform: translateY(105%); } to { transform: none; } }
@@ -246,7 +247,7 @@ footer p { max-width: 76ch; }
         <div class="copy">
           <span class="dash" aria-hidden="true"></span>
           <p class="kicker" id="s-sub">Streaming · Música · Nube · Gimnasio</p>
-          <h1 class="title" id="s-title"><span>Tus suscripciones</span><span>bajo control</span></h1>
+          <h1 class="title long" id="s-title"><span>Tus suscripciones</span><span>bajo control</span></h1>
           <p class="desc" id="s-desc">Wallos junta todo lo que pagas cada mes en un solo lugar. Ve cuánto gastas, cuándo se cobra cada una y deja de pagar lo que ya no usas.</p>
           <div class="actions">
             <a class="round" href="#galeria" aria-label="Ver la galería"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
@@ -453,6 +454,7 @@ footer p { max-width: 76ch; }
     frame.classList.toggle('mobile', s.mobile);
     var t = document.getElementById('s-title');
     t.innerHTML = '<span></span><span></span>'; t.children[0].textContent = L.title[0]; t.children[1].textContent = L.title[1];
+    t.classList.toggle('long', L.title.join(' ').split(' ').some(function (w) { return w.length > 10; }));
     document.getElementById('s-sub').textContent = L.sub;
     var d = document.getElementById('s-desc'); d.textContent = L.desc;
     var bd = document.getElementById('badge'); bd.innerHTML = '<b></b><span></span>'; bd.firstChild.textContent = L.badge[0]; bd.lastChild.textContent = L.badge[1];
