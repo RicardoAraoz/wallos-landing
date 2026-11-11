@@ -186,6 +186,8 @@ section { padding-block: 100px; }
 .shot .cap p { color: var(--muted); font-size: 14.5px; }
 .fit { position: relative; width: 100%; overflow: hidden; }
 .fit > .canvas { transform: scale(var(--s, .6)); }
+.shot.s2 .fit { max-width: 250px; margin-inline: auto; }
+.shot.s2 { align-content: space-between; }
 @media (max-width: 960px) { .gallery { grid-template-columns: 1fr 1fr; } .shot, .shot.s4, .shot.s2 { grid-column: span 2; } }
 
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
@@ -711,7 +713,7 @@ footer p { max-width: 80ch; }
     screen.innerHTML = s.view();
     var t = document.getElementById('s-title');
     t.innerHTML = '<span></span><span></span>'; t.children[0].textContent = L.title[0]; t.children[1].textContent = L.title[1];
-    t.classList.toggle('long', L.title.join(' ').split(' ').some(function (w) { return w.length > 10; }));
+    t.classList.toggle('long', L.title.some(function (line) { return line.length > 11; }));
     document.getElementById('s-sub').textContent = L.sub;
     var d = document.getElementById('s-desc'); d.textContent = L.desc;
     var bd = document.getElementById('badge'); bd.innerHTML = '<b></b><span></span>'; bd.firstChild.textContent = L.badge[0]; bd.lastChild.textContent = L.badge[1];
